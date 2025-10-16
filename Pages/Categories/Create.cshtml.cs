@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Cosma_Simona_Lab2.Data;
 using Cosma_Simona_Lab2.Models;
 
-namespace Cosma_Simona_Lab2.Pages.Publishers
+namespace Cosma_Simona_Lab2.Pages.Categories
 {
     public class CreateModel : PageModel
     {
@@ -25,8 +25,9 @@ namespace Cosma_Simona_Lab2.Pages.Publishers
         }
 
         [BindProperty]
-        public Publisher Publisher { get; set; } = default!;
+        public Category Category { get; set; } = default!;
 
+        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -34,7 +35,7 @@ namespace Cosma_Simona_Lab2.Pages.Publishers
                 return Page();
             }
 
-            _context.Publisher.Add(Publisher);
+            _context.Category.Add(Category);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

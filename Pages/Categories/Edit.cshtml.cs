@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Cosma_Simona_Lab2.Data;
 using Cosma_Simona_Lab2.Models;
 
-namespace Cosma_Simona_Lab2.Pages.Publishers
+namespace Cosma_Simona_Lab2.Pages.Categories
 {
     public class EditModel : PageModel
     {
@@ -21,7 +21,7 @@ namespace Cosma_Simona_Lab2.Pages.Publishers
         }
 
         [BindProperty]
-        public Publisher Publisher { get; set; } = default!;
+        public Category Category { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,15 +30,17 @@ namespace Cosma_Simona_Lab2.Pages.Publishers
                 return NotFound();
             }
 
-            var publisher =  await _context.Publisher.FirstOrDefaultAsync(m => m.ID == id);
-            if (publisher == null)
+            var category =  await _context.Category.FirstOrDefaultAsync(m => m.ID == id);
+            if (category == null)
             {
                 return NotFound();
             }
-            Publisher = publisher;
+            Category = category;
             return Page();
         }
 
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -46,7 +48,7 @@ namespace Cosma_Simona_Lab2.Pages.Publishers
                 return Page();
             }
 
-            _context.Attach(Publisher).State = EntityState.Modified;
+            _context.Attach(Category).State = EntityState.Modified;
 
             try
             {
@@ -54,7 +56,7 @@ namespace Cosma_Simona_Lab2.Pages.Publishers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PublisherExists(Publisher.ID))
+                if (!CategoryExists(Category.ID))
                 {
                     return NotFound();
                 }
@@ -67,9 +69,9 @@ namespace Cosma_Simona_Lab2.Pages.Publishers
             return RedirectToPage("./Index");
         }
 
-        private bool PublisherExists(int id)
+        private bool CategoryExists(int id)
         {
-            return _context.Publisher.Any(e => e.ID == id);
+            return _context.Category.Any(e => e.ID == id);
         }
     }
 }

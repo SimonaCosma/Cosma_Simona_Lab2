@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Cosma_Simona_Lab2.Data;
 using Cosma_Simona_Lab2.Models;
 
-namespace Cosma_Simona_Lab2.Pages.Books
+namespace Cosma_Simona_Lab2.Pages.Categories
 {
     public class DeleteModel : PageModel
     {
@@ -20,7 +20,7 @@ namespace Cosma_Simona_Lab2.Pages.Books
         }
 
         [BindProperty]
-        public Book Book { get; set; } = default!;
+        public Category Category { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,17 +29,15 @@ namespace Cosma_Simona_Lab2.Pages.Books
                 return NotFound();
             }
 
-            var book = await _context.Book
-                .Include(i =>i.Author)
-                .FirstOrDefaultAsync(m => m.ID == id);
+            var category = await _context.Category.FirstOrDefaultAsync(m => m.ID == id);
 
-            if (book == null)
+            if (category == null)
             {
                 return NotFound();
             }
             else
             {
-                Book = book;
+                Category = category;
             }
             return Page();
         }
@@ -51,26 +49,13 @@ namespace Cosma_Simona_Lab2.Pages.Books
                 return NotFound();
             }
 
-            // Includerea categoriilor asociate pentru a le elimina înainte de ștergere
-            var book = await _context.Book
-                .Include(b => b.Author)
-                .Include(i => i.BookCategories)
-                .FirstOrDefaultAsync(i => i.ID == id);
-
-            if (book == null)
+            var category = await _context.Category.FindAsync(id);
+            if (category != null)
             {
-                return NotFound();
+                Category = category;
+                _context.Category.Remove(Category);
+                await _context.SaveChangesAsync();
             }
-
-            //var book = await _context.Book.FindAsync(id);
-            // Ștergerea relațiilor cu categoriile
-            if (book.BookCategories != null && book.BookCategories.Any())
-            {
-                _context.BookCategory.RemoveRange(book.BookCategories);
-            }
-
-            _context.Book.Remove(book);
-            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }
