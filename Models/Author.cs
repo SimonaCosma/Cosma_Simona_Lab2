@@ -16,7 +16,10 @@ namespace Cosma_Simona_Lab2.Models
         [Display(Name = "Author")]
         public string FullName
         {
-            get { return $"{LastName} {FirstName}"; }
+            get
+            {
+                return FirstName + " " + LastName;
+            }
         }
         public ICollection<Book>? Books { get; set; }
     }
